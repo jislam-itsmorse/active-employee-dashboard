@@ -1,0 +1,37 @@
+name: Employee Dashboard — Bi-Monthly Email
+
+on:
+  schedule:
+    # Runs at 8:00 AM UTC on the 1st and 15th of every month
+    # (3:00 AM Eastern / 2:00 AM Central — arrives in inboxes by morning)
+    - cron: "0 13 1,15 * *"
+
+  # Allow manual trigger from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  send-dashboard:
+    name: Generate & Email Employee Dashboard
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run dashboard pipeline
+        env:
+          TENANT_ID:         ${{ secrets.TENANT_ID }}
+          CLIENT_ID:         ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET:     ${{ secrets.CLIENT_SECRET }}
+          EMAIL_SENDER:      ${{ secrets.EMAIL_SENDER }}
+          EMAIL_RECIPIENTS:  ${{ secrets.EMAIL_RECIPIENTS }}
+          EMAIL_SUBJECT:     ${{ secrets.EMAIL_SUBJECT }}
+        run: python main.py
