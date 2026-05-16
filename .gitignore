@@ -1,4 +1,5 @@
 local.settings.json
-.env
+env
 __pycache__/
 .python_packages/
+.vscode/
