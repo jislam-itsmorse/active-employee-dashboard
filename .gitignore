@@ -1,0 +1,4 @@
+local.settings.json
+.env
+__pycache__/
+.python_packages/
